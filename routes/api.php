@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\Auth\EmailVerificationController;
 use App\Http\Controllers\Api\Auth\LoginController;
 use App\Http\Controllers\Api\Auth\RegisterController;
 use App\Http\Controllers\Api\ProfileController;
@@ -10,6 +11,7 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
+// Auth Routes
 Route::prefix('auth')->group(function() {
     Route::post('register', RegisterController::class);
     Route::post('login', [LoginController::class, 'login'])->middleware('throttle:5,1');
@@ -19,6 +21,16 @@ Route::prefix('auth')->group(function() {
     });
 });
 
+// Profile Routes
 Route::middleware('auth:sanctum')->group(function() {
     Route::get('me', [ProfileController::class, 'show']);
 });
+
+// Verification Routes
+Route::get('email/verify/{id}/{hash}',[EmailVerificationController::class, 'verify'])
+    ->middleware(['signed','throttle:6,1'])
+    ->name('verification.verify');
+
+Route::post('email/resend',[EmailVerificationController::class, 'resend'])
+    ->middleware(['auth:sanctum','throttle:6,1'])
+    ->name('verification.resend');
