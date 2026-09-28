@@ -11,19 +11,20 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('games', function (Blueprint $table) {
+        Schema::create('products', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('game_id')->constrained('games')->cascadeOnDelete();
             $table->string('name');
-            $table->string('slug')->unique();
-            $table->string('thumbnail')->nullable();
-            $table->boolean('requires_server_id')->default(false);
+            $table->decimal('price', 12, 2);
+            $table->decimal('base_price', 12, 2)->nullable();
             $table->boolean('is_active')->default(true);
+            $table->integer('sort_order')->default(0);
             $table->timestamps();
         });
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('games');
+        Schema::dropIfExists('products');
     }
 };
