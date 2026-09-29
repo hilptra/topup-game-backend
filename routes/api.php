@@ -4,6 +4,8 @@ use App\Http\Controllers\Api\Auth\EmailVerificationController;
 use App\Http\Controllers\Api\Auth\LoginController;
 use App\Http\Controllers\Api\Auth\PasswordResetController;
 use App\Http\Controllers\Api\Auth\RegisterController;
+use App\Http\Controllers\Api\GameController;
+use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\ProfileController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -29,7 +31,17 @@ Route::prefix('auth')->group(function() {
     // Forgot & Reset Password
     Route::post('forgot-password', [PasswordResetController::class, 'sendResetLink'])->middleware('throttle:3,1');
     Route::post('reset-password', [PasswordResetController::class, 'reset'])->middleware('throttle:3,1');
+    
 });
+
+// Verification Routes
+Route::get('email/verify/{id}/{hash}',[EmailVerificationController::class, 'verify'])
+    ->middleware(['signed','throttle:6,1'])
+    ->name('verification.verify');
+
+Route::post('email/resend',[EmailVerificationController::class, 'resend'])
+    ->middleware(['auth:sanctum','throttle:6,1'])
+    ->name('verification.resend');
 
 // Profile Routes
 Route::middleware('auth:sanctum')->group(function() {
@@ -42,11 +54,10 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::put('profile/password', [ProfileController::class, 'changePassword']);
 });
 
-// Verification Routes
-Route::get('email/verify/{id}/{hash}',[EmailVerificationController::class, 'verify'])
-    ->middleware(['signed','throttle:6,1'])
-    ->name('verification.verify');
+// Game Routes
+Route::get('games',[GameController::class,'index']);
+Route::get('games/{slug}',[GameController::class,'show']);
 
-Route::post('email/resend',[EmailVerificationController::class, 'resend'])
-    ->middleware(['auth:sanctum','throttle:6,1'])
-    ->name('verification.resend');
+// Product Routes
+Route::get('products',[ProductController::class,'index']);
+
