@@ -34,6 +34,12 @@ Route::prefix('auth')->group(function() {
 // Profile Routes
 Route::middleware('auth:sanctum')->group(function() {
     Route::get('me', [ProfileController::class, 'show']);
+
+    // Update Profile
+    Route::put('profile', [ProfileController::class, 'update']);
+    
+    // Change Password
+    Route::put('profile/password', [ProfileController::class, 'changePassword']);
 });
 
 // Verification Routes
