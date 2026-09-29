@@ -29,7 +29,7 @@ class LoginController extends Controller
                 'token' => $token,
             ],
             'message' => 'Login Berhasil',
-        ], 201);
+        ],200);
     }
 
     public function logout(Request $request) {

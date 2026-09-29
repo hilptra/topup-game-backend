@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\Auth\EmailVerificationController;
 use App\Http\Controllers\Api\Auth\LoginController;
+use App\Http\Controllers\Api\Auth\PasswordResetController;
 use App\Http\Controllers\Api\Auth\RegisterController;
 use App\Http\Controllers\Api\ProfileController;
 use Illuminate\Http\Request;
@@ -13,12 +14,21 @@ Route::get('/user', function (Request $request) {
 
 // Auth Routes
 Route::prefix('auth')->group(function() {
+
+    // Register
     Route::post('register', RegisterController::class);
+
+    // Login
     Route::post('login', [LoginController::class, 'login'])->middleware('throttle:5,1');
 
+    // Logout
     Route::middleware('auth:sanctum')->group(function() {
         Route::post('logout',[LoginController::class,'logout']);
     });
+
+    // Forgot & Reset Password
+    Route::post('forgot-password', [PasswordResetController::class, 'sendResetLink'])->middleware('throttle:3,1');
+    Route::post('reset-password', [PasswordResetController::class, 'reset'])->middleware('throttle:3,1');
 });
 
 // Profile Routes
