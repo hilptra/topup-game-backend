@@ -40,7 +40,7 @@ class GameSeeder extends Seeder
         $freeFire = Game::create([
             'name' => 'Free Fire',
             'slug' => 'free-fire',
-            'requires_server_id' => true,
+            'requires_server_id' => false,
             'is_active' => true,
         ]);
 
