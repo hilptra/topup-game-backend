@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\Auth\LoginController;
 use App\Http\Controllers\Api\Auth\PasswordResetController;
 use App\Http\Controllers\Api\Auth\RegisterController;
 use App\Http\Controllers\Api\GameController;
+use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\ProfileController;
 use Illuminate\Http\Request;
@@ -52,6 +53,12 @@ Route::middleware('auth:sanctum')->group(function() {
     
     // Change Password
     Route::put('profile/password', [ProfileController::class, 'changePassword']);
+
+    // Order
+    Route::post('games/{game}/validate-account', [OrderController::class, 'validateAccount']);
+    Route::get('orders', [OrderController::class, 'index']);
+    Route::post('orders', [OrderController::class, 'store']);
+    Route::get('orders/{order}', [OrderController::class, 'show']);
 });
 
 // Game Routes
