@@ -6,6 +6,8 @@ use App\Http\Controllers\Api\Auth\PasswordResetController;
 use App\Http\Controllers\Api\Auth\RegisterController;
 use App\Http\Controllers\Api\GameController;
 use App\Http\Controllers\Api\OrderController;
+use App\Http\Controllers\Api\PaymentController;
+use App\Http\Controllers\Api\PaymentWebhookController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\ProfileController;
 use Illuminate\Http\Request;
@@ -44,7 +46,7 @@ Route::post('email/resend',[EmailVerificationController::class, 'resend'])
     ->middleware(['auth:sanctum','throttle:6,1'])
     ->name('verification.resend');
 
-// Profile Routes
+
 Route::middleware('auth:sanctum')->group(function() {
     Route::get('me', [ProfileController::class, 'show']);
 
@@ -59,6 +61,9 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::get('orders', [OrderController::class, 'index']);
     Route::post('orders', [OrderController::class, 'store']);
     Route::get('orders/{order}', [OrderController::class, 'show']);
+
+    // Payment
+    Route::post('payments', [PaymentController::class, 'store']);
 });
 
 // Game Routes
@@ -67,4 +72,7 @@ Route::get('games/{slug}',[GameController::class,'show']);
 
 // Product Routes
 Route::get('products',[ProductController::class,'index']);
+
+// Webhook
+Route::post('webhooks/payment', [PaymentWebhookController::class, 'handle']);
 
