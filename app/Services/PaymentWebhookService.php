@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Jobs\ProcessTopUp;
 use App\Models\Payment;
 use App\Models\PaymentWebhookLog;
 
@@ -51,6 +52,7 @@ class PaymentWebhookService
 
         if (in_array($transactionStatus, ['settlement', 'capture'])) {
             $order->update(['status' => 'paid']);
+            ProcessTopUp::dispatch($order);
         } elseif (in_array($transactionStatus, ['expire', 'cancel', 'deny'])) {
             $order->update(['status' => $transactionStatus === 'expire' ? 'expired' : 'failed']);
         }

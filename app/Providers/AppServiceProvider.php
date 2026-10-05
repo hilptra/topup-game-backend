@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Services\TopUp\MockTopUpProvider;
+use App\Services\TopUp\TopUpProviderInterface;
 use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Support\ServiceProvider;
 
@@ -12,7 +14,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        $this->app->bind(TopUpProviderInterface::class, MockTopUpProvider::class);
+
     }
 
     /**
